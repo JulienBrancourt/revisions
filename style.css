@@ -400,7 +400,7 @@ header {
   color: var(--ink);
   outline: none;
   transition: border-color 0.15s;
-  -webkit-appearance: none;
+  --webkit-appearance: none;
 }
 .form-input:focus,
 .form-textarea:focus { border-color: var(--accent); }
