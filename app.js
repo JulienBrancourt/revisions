@@ -63,6 +63,7 @@ function createCard(question, answer) {
     question,
     answer,
     stage: 0,
+    originDate: today(), // J de référence : création ou dernier échec
     nextReview: today(),
     createdAt: today(),
     correctCount: 0,
@@ -219,10 +220,11 @@ function revealAnswer() {
   document.getElementById('btn-reveal-container').classList.add('hidden');
   document.getElementById('btn-eval-container').classList.remove('hidden');
  
-  // Aperçu des prochains intervalles
+  // Aperçu des prochains intervalles depuis J
   const nextCorrectInterval = nextInterval(card.stage + 1);
+  const nextCorrectDate     = addDays(card.originDate || card.createdAt, nextCorrectInterval);
   document.getElementById('interval-info').textContent =
-    `✓ Correct → revu dans ${nextCorrectInterval} j  ·  ✗ Raté → revu demain`;
+    `✓ Correct → revu le ${nextCorrectDate}  ·  ✗ Raté → revu demain`;
 }
  
 function evaluate(correct) {
@@ -234,12 +236,15 @@ function evaluate(correct) {
   if (correct) {
     cards[idx].stage += 1;
     cards[idx].correctCount = (cards[idx].correctCount || 0) + 1;
-    cards[idx].nextReview   = addDays(today(), nextInterval(cards[idx].stage));
+    // nextReview = J + intervalle, où J = origine de la fiche (createdAt ou dernierEchec)
+    cards[idx].nextReview = addDays(cards[idx].originDate, nextInterval(cards[idx].stage));
     sessionCorrect++;
   } else {
+    // L'échec devient le nouveau J
+    cards[idx].originDate = today();
     cards[idx].stage      = 0;
     cards[idx].wrongCount = (cards[idx].wrongCount || 0) + 1;
-    cards[idx].nextReview = addDays(today(), INTERVALS[0]); // retour à J+1
+    cards[idx].nextReview = addDays(today(), INTERVALS[0]); // nouveau J + 1
     sessionWrong++;
   }
  
@@ -383,7 +388,11 @@ function importCardsFromJSON(data) {
     parsed.forEach(item => {
       if (!item.question || !item.answer) return;
       if (item.id) {
-        if (!existing.find(c => c.id === item.id)) { existing.push(item); added++; }
+        if (!existing.find(c => c.id === item.id)) {
+          if (!item.originDate) item.originDate = item.createdAt || today();
+          existing.push(item);
+          added++;
+        }
       } else {
         existing.push(createCard(item.question, item.answer));
         added++;

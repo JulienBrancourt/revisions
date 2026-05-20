@@ -53,7 +53,7 @@
     ▶ Commencer la session
   </button>
  
-  <div id="no-cards-msg" class="hidden" style="text-align:center; color:var(--ink-faint); font-style:italic; font-size:0.85rem;">
+  <div id="no-cards-msg" class="no-cards-msg hidden">
     Crée des fiches depuis l'onglet + pour commencer.
   </div>
  
@@ -66,7 +66,7 @@
  
   <div>
     <div class="progress-bar">
-      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      <div class="progress-fill" id="progress-fill"></div>
     </div>
     <div class="progress-label">
       <span id="progress-text">0 / 0</span>
@@ -105,7 +105,7 @@
     <div class="end-icon">🎉</div>
     <div class="end-title">Session terminée !</div>
     <div class="end-sub" id="end-stats">Toutes les fiches du jour ont été révisées.</div>
-    <button class="btn btn-primary" style="max-width:240px;"
+    <button class="btn btn-primary btn-end"
             onclick="showScreen('home'); updateHome();">
       Retour à l'accueil
     </button>
@@ -120,7 +120,7 @@
   <div class="section-title">Nouvelle fiche</div>
   <div class="section-sub">Ajoute une question et sa réponse.</div>
  
-  <div style="display:flex; flex-direction:column; gap:12px; flex:1;">
+  <div class="add-form">
     <div class="form-group">
       <label class="form-label">Question</label>
       <textarea class="form-textarea" id="new-question"
@@ -136,12 +136,11 @@
  
   <!-- Zone d'import JSON -->
   <div>
-    <div style="text-align:center; font-size:0.75rem; color:var(--ink-faint);
-                margin:4px 0; letter-spacing:0.06em; text-transform:uppercase;">ou</div>
+    <div class="import-separator">ou</div>
     <div class="import-area" id="jsonImportArea">
       <div class="icon">📄</div>
       <p>Importer un fichier <strong>cards.json</strong></p>
-      <p style="font-size:0.75rem; margin-top:4px;">Touchez pour choisir un fichier</p>
+      <p class="small">Touchez pour choisir un fichier</p>
     </div>
     <input type="file" id="jsonFileInput" accept=".json" class="hidden">
   </div>

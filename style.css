@@ -435,7 +435,37 @@ header {
   max-width: 280px;
 }
  
+/* ── NO CARDS MESSAGE ── */
+.no-cards-msg {
+  text-align: center;
+  color: var(--ink-faint);
+  font-style: italic;
+  font-size: 0.85rem;
+}
+ 
+/* ── ADD FORM ── */
+.add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+ 
+/* ── END BUTTON ── */
+.btn-end {
+  max-width: 240px;
+}
+ 
 /* ── IMPORT AREA ── */
+.import-separator {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+  margin: 4px 0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+ 
 .import-area {
   background: var(--cream);
   border: 2px dashed rgba(26,21,16,0.2);
@@ -447,7 +477,11 @@ header {
 }
 .import-area:active { border-color: var(--accent); }
 .import-area p { color: var(--ink-faint); font-style: italic; margin-top: 8px; font-size: 0.85rem; }
+.import-area p.small { font-size: 0.75rem; margin-top: 4px; }
 .import-area .icon { font-size: 2rem; }
+ 
+/* ── PROGRESS FILL (état initial) ── */
+.progress-fill { width: 0%; }
  
 /* ── TOAST ── */
 .toast {
