@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mémorisation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+ 
+<!-- ── HEADER ── -->
+<header>
+  <div class="app-title">Mémo<span>ria</span></div>
+  <div class="header-actions">
+    <button class="icon-btn" id="exportBtn" title="Exporter la progression">💾</button>
+    <button class="icon-btn" id="importBtn" title="Importer une sauvegarde">📂</button>
+  </div>
+</header>
+ 
+<!-- ══════════════════════════════════════════════════════
+     SCREEN : ACCUEIL
+════════════════════════════════════════════════════════ -->
+<section class="screen active" id="screen-home">
+ 
+  <div class="stats-bar">
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-num" id="stat-total">0</div>
+        <div class="stat-label">Fiches</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-num accent" id="stat-due">0</div>
+        <div class="stat-label">À réviser</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-num green" id="stat-mastered">0</div>
+        <div class="stat-label">Maîtrisées</div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="due-card">
+    <div class="due-count pulse" id="home-due-count">0</div>
+    <div class="due-label" id="home-due-label">fiches à réviser aujourd'hui</div>
+    <div class="due-sublabel" id="home-next-label"></div>
+  </div>
+ 
+  <button class="btn btn-primary" id="startBtn">
+    ▶ Commencer la session
+  </button>
+ 
+  <div id="no-cards-msg" class="hidden" style="text-align:center; color:var(--ink-faint); font-style:italic; font-size:0.85rem;">
+    Crée des fiches depuis l'onglet + pour commencer.
+  </div>
+ 
+</section>
+ 
+<!-- ══════════════════════════════════════════════════════
+     SCREEN : RÉVISION
+════════════════════════════════════════════════════════ -->
+<section class="screen" id="screen-review">
+ 
+  <div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+    <div class="progress-label">
+      <span id="progress-text">0 / 0</span>
+      <span id="progress-pct">0%</span>
+    </div>
+  </div>
+ 
+  <div class="flashcard" id="flashcard">
+    <div class="card-meta">
+      <span class="card-badge" id="card-type-badge">Question</span>
+      <span id="card-interval-label"></span>
+    </div>
+    <div class="card-content question-text" id="card-question"></div>
+    <div class="card-divider hidden" id="card-divider"></div>
+    <div class="card-content answer-text hidden" id="card-answer"></div>
+  </div>
+ 
+  <div id="btn-reveal-container">
+    <button class="btn btn-reveal" id="revealBtn">Voir la réponse</button>
+  </div>
+ 
+  <div id="btn-eval-container" class="btn-row hidden">
+    <button class="btn btn-wrong"   id="wrongBtn">✗ Raté</button>
+    <button class="btn btn-correct" id="correctBtn">✓ Correct</button>
+  </div>
+ 
+  <div class="interval-info" id="interval-info"></div>
+ 
+</section>
+ 
+<!-- ══════════════════════════════════════════════════════
+     SCREEN : FIN DE SESSION
+════════════════════════════════════════════════════════ -->
+<section class="screen" id="screen-end">
+  <div class="session-end">
+    <div class="end-icon">🎉</div>
+    <div class="end-title">Session terminée !</div>
+    <div class="end-sub" id="end-stats">Toutes les fiches du jour ont été révisées.</div>
+    <button class="btn btn-primary" style="max-width:240px;"
+            onclick="showScreen('home'); updateHome();">
+      Retour à l'accueil
+    </button>
+  </div>
+</section>
+ 
+<!-- ══════════════════════════════════════════════════════
+     SCREEN : AJOUTER UNE FICHE
+════════════════════════════════════════════════════════ -->
+<section class="screen" id="screen-add">
+ 
+  <div class="section-title">Nouvelle fiche</div>
+  <div class="section-sub">Ajoute une question et sa réponse.</div>
+ 
+  <div style="display:flex; flex-direction:column; gap:12px; flex:1;">
+    <div class="form-group">
+      <label class="form-label">Question</label>
+      <textarea class="form-textarea" id="new-question"
+                placeholder="Quelle est la formule de l'eau ?"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Réponse</label>
+      <textarea class="form-textarea" id="new-answer"
+                placeholder="H₂O"></textarea>
+    </div>
+    <button class="btn btn-primary" id="addCardBtn">Ajouter la fiche</button>
+  </div>
+ 
+  <!-- Zone d'import JSON -->
+  <div>
+    <div style="text-align:center; font-size:0.75rem; color:var(--ink-faint);
+                margin:4px 0; letter-spacing:0.06em; text-transform:uppercase;">ou</div>
+    <div class="import-area" id="jsonImportArea">
+      <div class="icon">📄</div>
+      <p>Importer un fichier <strong>cards.json</strong></p>
+      <p style="font-size:0.75rem; margin-top:4px;">Touchez pour choisir un fichier</p>
+    </div>
+    <input type="file" id="jsonFileInput" accept=".json" class="hidden">
+  </div>
+ 
+</section>
+ 
+<!-- ══════════════════════════════════════════════════════
+     SCREEN : GÉRER LES FICHES
+════════════════════════════════════════════════════════ -->
+<section class="screen" id="screen-manage">
+ 
+  <div class="section-title">Mes fiches</div>
+  <div class="section-sub" id="manage-count"></div>
+ 
+  <div class="card-list" id="card-list"></div>
+ 
+  <div class="empty-state hidden" id="manage-empty">
+    <div class="icon">📭</div>
+    <p>Aucune fiche pour l'instant.<br>Crée-en depuis l'onglet +.</p>
+  </div>
+ 
+</section>
+ 
+<!-- ── NAVIGATION ── -->
+<nav>
+  <button class="nav-btn active" data-screen="home"   onclick="navTo('home')">
+    <span class="nav-icon">🏠</span>Accueil
+  </button>
+  <button class="nav-btn"        data-screen="add"    onclick="navTo('add')">
+    <span class="nav-icon">＋</span>Ajouter
+  </button>
+  <button class="nav-btn"        data-screen="manage" onclick="navTo('manage')">
+    <span class="nav-icon">📚</span>Fiches
+  </button>
+</nav>
+ 
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+ 
+<!-- Input caché pour l'import de sauvegarde complète -->
+<input type="file" id="progressImportInput" accept=".json" class="hidden">
+ 
+<script src="app.js"></script>
+</body>
+</html>

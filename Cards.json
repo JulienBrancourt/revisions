@@ -1,0 +1,22 @@
+[
+  {
+    "question": "Quelle est la formule chimique de l'eau ?",
+    "answer": "H₂O — deux atomes d'hydrogène liés à un atome d'oxygène."
+  },
+  {
+    "question": "Qui a écrit « Les Misérables » ?",
+    "answer": "Victor Hugo, publié en 1862."
+  },
+  {
+    "question": "Combien y a-t-il d'os dans le corps humain adulte ?",
+    "answer": "206 os."
+  },
+  {
+    "question": "Quelle est la capitale de l'Australie ?",
+    "answer": "Canberra (et non Sydney ou Melbourne)."
+  },
+  {
+    "question": "Que signifie l'acronyme RAM ?",
+    "answer": "Random Access Memory — mémoire vive à accès aléatoire."
+  }
+]
